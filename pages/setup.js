@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Setup() {
   return (
     <div className="container">
       <Head>
@@ -11,12 +11,22 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Seven wonders app with <a href="https://nextjs.org">Next.js!</a>
+          Setup
         </h1>
 
+
+        <button className="description">
+          Add Player
+        </button>
+        <ul>
+          <li>Son</li>
+          <li>Khanh</li>
+          <li>Ninh</li>
+        </ul>
+
         <button>
-          <Link className="description" href="/setup">
-            New game
+          <Link className="description" href="/score">
+            Start game
           </Link>
         </button>
       </main>
