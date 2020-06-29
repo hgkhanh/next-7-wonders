@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
       "@components/*": [
         "components/*"
       ],
       "@library/*": [
         "library/*"
+      ],
+      "@styles/*": [
+        "styles/*"
       ]
     },
     "target": "es5",

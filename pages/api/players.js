@@ -7,7 +7,6 @@ const q = faunadb.query
 const client = new faunadb.Client({ secret })
 
 module.exports = async (req, res) => {
-    console.log('secret', secret);
     try {
         const dbs = await client.query(
             q.Map(
