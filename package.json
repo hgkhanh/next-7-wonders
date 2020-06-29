@@ -9,13 +9,17 @@
     "export": "next export"
   },
   "dependencies": {
+    "faunadb": "^2.14.2",
+    "graphql-request": "^2.0.0",
     "next": "9.4.4",
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-preset-env": "^6.7.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "sass": "^1.26.9",
-    "tailwindcss": "^1.4.6"
+    "swr": "^0.2.3",
+    "tailwindcss": "^1.4.6",
+    "unfetch": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.14",

@@ -1,6 +1,7 @@
 import Head from 'next/head'
+import Link from 'next/link'
 
-export default function Score() {
+const HomePage = () => {
   return (
     <div className="container">
       <Head>
@@ -10,23 +11,15 @@ export default function Score() {
 
       <main>
         <h1 className="title">
-          Score
+          Seven wonders app with <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className="description">
-          Score table
-        </p>
-
         <button>
-          <p className="description">
-            Winner ?
-        </p>
-        </button>
-
-        <button>
-          <p className="description">
-            Statistic
-          </p>
+          <Link href="/setup">
+            <a className="description">
+              New game
+            </a>
+          </Link>
         </button>
       </main>
 
@@ -189,3 +182,5 @@ export default function Score() {
     </div>
   )
 }
+
+export default HomePage

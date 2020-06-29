@@ -1,7 +1,14 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import useSWR from 'swr'
+import { JSONFetcher } from '../library/fetchers.js'
 
-export default function Setup() {
+const SetupPage = () => {
+  const { data, error } = useSWR('/api/players', JSONFetcher);
+  console.log('error', error);
+  console.log('data', data);
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
   return (
     <div className="container">
       <Head>
@@ -14,19 +21,18 @@ export default function Setup() {
           Setup
         </h1>
 
-
         <button className="description">
           Add Player
         </button>
         <ul>
-          <li>Son</li>
-          <li>Khanh</li>
-          <li>Ninh</li>
+          {data.map((item) => (<li key={item.data.name}>{item.data.name}</li>))}
         </ul>
 
         <button>
-          <Link className="description" href="/score">
-            Start game
+          <Link href="/score">
+            <a className="description">
+              Start game
+            </a>
           </Link>
         </button>
       </main>
@@ -190,3 +196,5 @@ export default function Setup() {
     </div>
   )
 }
+
+export default SetupPage
