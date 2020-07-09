@@ -9,30 +9,38 @@ const SetupPage = () => {
   const getPlayers = async (key) => {
     const response = await fetch(key);
     const data = await response.json();
-    return data[0] ? data[0].data : {};
+    return data[0] && data[0].data ? data[0].data.players : {};
   };
 
-  const updatePlayerData = async (newPlayerData) => {
-    console.log('updatePlayerData', newPlayerData);
+  const updatePlayers = async (players) => {
     const response = await fetch(playersAPI, {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
       },
       body: JSON.stringify({
-        players: newPlayerData
-      }),
+        players: players
+      })
     });
-    mutate(playersAPI, { ...newPlayerData });
-    return await response.json();
+    const data = await response.json();
+    console.log('updatePlayers', data);
+    return data.players ? [...data.players] : [];
+  };
+
+  const updatePlayerData = async (newPlayerData) => {
+    console.log('updatePlayerData', newPlayerData);
+    // Mutate will make the change to local data
+    // Even if the submit is slow, data in UI is update instantly
+    // shouldRevalidate == false: when data is submitted, there is no recheck
+    mutate(playersAPI, [...newPlayerData], false);
+    mutate(playersAPI, await updatePlayers(newPlayerData));
   };
 
 
-  const { data, error, mutate } = useSWR(playersAPI, getPlayers);
-  console.log('data', data);
+  const { data, error } = useSWR(playersAPI, getPlayers);
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
-  if (data) {
+  if (data && data.length > 0) {
     return (
       <div className="container">
         <Head>
@@ -44,7 +52,7 @@ const SetupPage = () => {
           <h1 className="title">
             Setup
           </h1>
-          <Player players={data.players} updatePlayerData={(data) => updatePlayerData(data)} />
+          <Player players={data} updatePlayerData={(data) => updatePlayerData(data)} />
         </main>
 
         <footer>

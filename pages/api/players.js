@@ -29,15 +29,8 @@ export default async (req, res) => {
         }
         // PUT means Update playerLists
         else if (req.method === 'PUT' && req.body && req.body.players) {
-            // console.log('1');
-            // await sleep(2000);
             // Get the ref of the player document (only one doc in the players collection)
-            // console.log('start the PUT, but wait 5s');
-            // setTimeout(async () => {
             const ref = getQuery.data[0].ref;
-
-            // console.log('2');
-            // console.log(ref);
             const putQuery = await client.query(
                 q.Update(
                     ref,
@@ -49,9 +42,7 @@ export default async (req, res) => {
                 )
             )
             // ok
-            res.status(200).json(putQuery.data)
-
-            // }, 5000);
+            res.status(200).json(putQuery.data);
         }
     } catch (e) {
         // something went wrong

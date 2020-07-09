@@ -16,8 +16,6 @@ const Player = (props) => {
             case 'setName':
                 newPlayersState = [...playersState];
                 playersState[action.playerNumber].name = action.name;
-                console.log('Player comp', 'set Name reducer');
-                // mutate(newPlayersState)
                 return newPlayersState;
             case 'addPlayer':
                 return [...playersState, { name: 'player' }];
@@ -33,12 +31,12 @@ const Player = (props) => {
     const [players, dispatch] = useReducer(playersReducer, props.players || null);
     const [isEditMode, setEditMode] = useState(false);
     const [isMounted, setMounted] = useState(false);
-    console.log('players', players);
 
     useEffect(() => {
         // If toggle to false, update the player list in db
         if (!isEditMode && isMounted) {
             console.log('isEditMode', 'toggle to ' + isEditMode);
+            console.log('players', players);
             props.updatePlayerData(players);
         }
     }, [isEditMode])
@@ -47,7 +45,7 @@ const Player = (props) => {
         setMounted(true);
     }, [])
 
-    console.log(props);
+    console.log('Players props', props);
     if (players) {
         return (
             <Fragment>
@@ -59,52 +57,56 @@ const Player = (props) => {
                     </label>
                 </div>
 
-                {/* {!isEditMode && ( */}
-                <Fragment>
-                    <h2>
-                        Choose players
+                {!isEditMode && (
+                    <Fragment>
+                        <h2>
+                            Choose players
                     </h2>
-                    <ul>
-                        {props.players && props.players.map((item, index) => (
-                            <li key={index}>{item.name}</li>
-                        ))}
-                    </ul>
-                </Fragment>
-                {/* )} */}
-                {/* {isEditMode && ( */}
-                <Fragment>
-                    <h2>
-                        Edit players
+                        <ul>
+                            {props.players && props.players.length > 0 && props.players.map((item, index) => (
+                                <li key={index}>{item.name}</li>
+                            ))}
+                        </ul>
+                    </Fragment>
+                )}
+                {isEditMode && (
+                    <Fragment>
+                        <h2>
+                            Edit players
                         </h2>
-                    <ul>
-                        {players.map((item, index) => (
-                            <Fragment key={`edit-${index}`}>
-                                <li>
-                                    <input type="text" value={item.name}
-                                        onChange={event => dispatch({
-                                            type: 'setName',
-                                            playerNumber: index,
-                                            name: event.target.value
-                                        })} />
-                                </li>
-                                <button onClick={() => dispatch({ type: 'removePlayer', playerNumber: index })}>Delete</button>
-                            </Fragment>
-                        ))}
-                    </ul>
-                    <button className="description" onClick={() => dispatch({ type: 'addPlayer' })}>
-                        Add Player
+                        <ul>
+                            {players.map((item, index) => (
+                                <Fragment key={`edit-${index}`}>
+                                    <li>
+                                        <input type="text" value={item.name}
+                                            onChange={event => dispatch({
+                                                type: 'setName',
+                                                playerNumber: index,
+                                                name: event.target.value
+                                            })} />
+                                    </li>
+                                    <button onClick={() => dispatch({ type: 'removePlayer', playerNumber: index })}>Delete</button>
+                                </Fragment>
+                            ))}
+                        </ul>
+                        <button className="description" onClick={() => dispatch({ type: 'addPlayer' })}>
+                            Add Player
                         </button>
-                </Fragment>
-                {/* )} */}
-                <button>
-                    <Link href="/score">
-                        <a className="description">
-                            Start game
+                    </Fragment>
+                )}
+                {!isEditMode && (
+                    <button>
+                        <Link href="/score">
+                            <a className="description">
+                                Start game
                         </a>
-                    </Link>
-                </button>
+                        </Link>
+                    </button>
+                )}
             </Fragment>
         )
+    } else {
+        return (<div></div>);
     }
 }
 
