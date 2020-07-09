@@ -6,7 +6,7 @@ const HomePage = () => {
   return (
     <div className="container">
       <Head>
-        <title>Next 7 wonders app</title>
+        <title>Next 7 wonders</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

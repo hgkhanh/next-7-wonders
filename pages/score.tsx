@@ -4,7 +4,7 @@ const ScorePage = () => {
   return (
     <div className="container">
       <Head>
-        <title>Next 7 wonders app</title>
+        <title>Next 7 wonders | Score</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
