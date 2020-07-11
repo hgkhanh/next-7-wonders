@@ -1,6 +1,10 @@
 import Head from 'next/head'
+import React, { useState } from 'react';
 
-const ScorePage = () => {
+const ScorePage = ({ initialPlayers }) => {
+  console.log('initialPlayers', initialPlayers);
+  const [players, setPlayers] = useState(initialPlayers || []);
+
   return (
     <div className="container">
       <Head>
@@ -16,7 +20,7 @@ const ScorePage = () => {
         <p className="description">
           Score table
         </p>
-
+        {players && players.length > 0 && players.map((player, index) => <span key={index}>{player}</span>)}
         <button>
           <p className="description">
             Winner ?
@@ -47,3 +51,9 @@ const ScorePage = () => {
 }
 
 export default ScorePage
+
+export async function getServerSideProps({ query }) {
+  return {
+    props: { initialPlayers: JSON.parse(decodeURI(query.players)) }
+  }
+}

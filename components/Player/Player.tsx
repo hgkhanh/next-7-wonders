@@ -96,7 +96,12 @@ const Player = (props) => {
                 )}
                 {!isEditMode && (
                     <button>
-                        <Link href="/score">
+                        <Link href={{
+                            pathname: "/score",
+                            query: {
+                                players: encodeURI(JSON.stringify(players.map((player) => player.name)))
+                            }
+                        }}>
                             <a className="description">
                                 Start game
                         </a>
