@@ -19,7 +19,8 @@
     "sass": "^1.26.9",
     "swr": "^0.2.3",
     "tailwindcss": "^1.4.6",
-    "unfetch": "^4.1.0"
+    "unfetch": "^4.1.0",
+    "use-local-storage-state": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^14.0.14",

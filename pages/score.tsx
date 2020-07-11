@@ -1,9 +1,11 @@
 import Head from 'next/head'
 import React, { useState } from 'react';
+import useLocalStorageState from "use-local-storage-state";
 
 const ScorePage = ({ initialPlayers }) => {
   console.log('initialPlayers', initialPlayers);
-  const [players, setPlayers] = useState(initialPlayers || []);
+  // List of player who play this game
+  const [playing, setPlaying] = useLocalStorageState('playing', []);
 
   return (
     <div className="container">
@@ -16,11 +18,11 @@ const ScorePage = ({ initialPlayers }) => {
         <h1 className="title">
           Score
         </h1>
+        {JSON.stringify(playing)}
 
         <p className="description">
           Score table
         </p>
-        {players && players.length > 0 && players.map((player, index) => <span key={index}>{player}</span>)}
         <button>
           <p className="description">
             Winner ?
@@ -51,9 +53,3 @@ const ScorePage = ({ initialPlayers }) => {
 }
 
 export default ScorePage
-
-export async function getServerSideProps({ query }) {
-  return {
-    props: { initialPlayers: JSON.parse(decodeURI(query.players)) }
-  }
-}

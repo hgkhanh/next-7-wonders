@@ -3,13 +3,20 @@ import Link from 'next/link'
 import useSWR from 'swr'
 import fetch from 'unfetch'
 import { Fragment, useReducer, useState, useEffect } from 'react'
+import useLocalStorageState from "use-local-storage-state";
 
+interface PlayerList {
+    name: string,
+    active: boolean
+}
 /**
  * Maintain a state: players = {}
  * This will be display to the UI
  * Only when exiting edit mode, we submit the change to DB (updatePlayerData) 
  */
 const Player = (props) => {
+    // List of player who play this game
+    const [playing, setPlaying] = useLocalStorageState('playing', []);
     const playersReducer = (playersState, action) => {
         let newPlayersState;
         switch (action.type) {
@@ -18,17 +25,28 @@ const Player = (props) => {
                 playersState[action.playerNumber].name = action.name;
                 return newPlayersState;
             case 'addPlayer':
-                return [...playersState, { name: 'player' }];
+                return [...playersState, { name: 'player', active: true }];
             case 'removePlayer':
                 newPlayersState = [...playersState.filter(
                     (player, index) => index !== action.playerNumber
                 )];
                 return newPlayersState;
+            case 'setActive':
+                newPlayersState = [...playersState];
+                playersState[action.playerNumber].active = action.active;
+                setPlaying(newPlayersState.filter((player) => player.active).map(item => item.name));
+                return newPlayersState;
             default:
                 return playersState
         }
     }
-    const [players, dispatch] = useReducer(playersReducer, props.players || null);
+    const initialPlayersSet = props.players.map((player) => {
+        return {
+            name: player.name,
+            active: false
+        }
+    });
+    const [players, dispatch] = useReducer(playersReducer, initialPlayersSet || null);
     const [isEditMode, setEditMode] = useState(false);
     const [isMounted, setMounted] = useState(false);
 
@@ -63,8 +81,18 @@ const Player = (props) => {
                             Choose players
                     </h2>
                         <ul>
-                            {props.players && props.players.length > 0 && props.players.map((item, index) => (
-                                <li key={index}>{item.name}</li>
+                            {players && players.length > 0 && players.map((item, index) => (
+                                <div key={index}>
+                                    <label>
+                                        <input type="checkbox" checked={item.active}
+                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch({
+                                                type: 'setActive',
+                                                playerNumber: index,
+                                                active: event.target.checked
+                                            })} />
+                                        {item.name}
+                                    </label>
+                                </div>
                             ))}
                         </ul>
                     </Fragment>
@@ -96,12 +124,7 @@ const Player = (props) => {
                 )}
                 {!isEditMode && (
                     <button>
-                        <Link href={{
-                            pathname: "/score",
-                            query: {
-                                players: encodeURI(JSON.stringify(players.map((player) => player.name)))
-                            }
-                        }}>
+                        <Link href="/score">
                             <a className="description">
                                 Start game
                         </a>
