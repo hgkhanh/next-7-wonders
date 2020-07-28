@@ -1,20 +1,20 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import useSWR from 'swr'
-import fetch from 'unfetch'
+import { useRouter } from 'next/router'
 import { Fragment, useReducer, useState, useEffect } from 'react'
 import useLocalStorageState from "use-local-storage-state";
 
-interface PlayerList {
-    name: string,
-    active: boolean
-}
+// interface PlayerList {
+//     name: string,
+//     active: boolean
+// }
 /**
  * Maintain a state: players = {}
  * This will be display to the UI
  * Only when exiting edit mode, we submit the change to DB (updatePlayerData) 
  */
 const Player = (props) => {
+    const router = useRouter()
+
     // List of player who play this game
     const [playing, setPlaying] = useLocalStorageState('playing', []);
     const playersReducer = (playersState, action) => {
@@ -49,6 +49,7 @@ const Player = (props) => {
     const [players, dispatch] = useReducer(playersReducer, initialPlayersSet || null);
     const [isEditMode, setEditMode] = useState(false);
     const [isMounted, setMounted] = useState(false);
+    const [localScore, setScore] = useLocalStorageState('score', []);
 
     useEffect(() => {
         // If toggle to false, update the player list in db
@@ -61,7 +62,14 @@ const Player = (props) => {
 
     useEffect(() => {
         setMounted(true);
-    }, [])
+    }, []);
+
+    const startGame = () => {
+        // clear score from last game
+        setScore([]);
+        // Navigate to /score
+        router.push('/score');
+    }
 
     console.log('Players props', props);
     if (players) {
@@ -123,12 +131,8 @@ const Player = (props) => {
                     </Fragment>
                 )}
                 {!isEditMode && (
-                    <button>
-                        <Link href="/score">
-                            <a className="description">
-                                Start game
-                        </a>
-                        </Link>
+                    <button onClick={startGame}>
+                        Start game
                     </button>
                 )}
             </Fragment>

@@ -1,6 +1,8 @@
 import React, { useContext, useState, useReducer, useEffect } from 'react';
 import Row from './Row';
 import Category from '@config/Category';
+import useLocalStorageState from "use-local-storage-state";
+
 const Scoresheet = ({ listOfPlayers }) => {
     const blankPlayer = {
         name: 'p1',
@@ -15,7 +17,7 @@ const Scoresheet = ({ listOfPlayers }) => {
         switch (action.type) {
             case 'setPoints':
                 console.log('Set a single point field');
-                return playersState.map((player, index) => {
+                let resultState = playersState.map((player, index) => {
                     if (index === action.playerNumber) {
                         let score = [...player.score];
                         score[action.column] = action.point;
@@ -23,6 +25,10 @@ const Scoresheet = ({ listOfPlayers }) => {
                     }
                     return player;
                 });
+
+                // save to localStorage
+                setScore(resultState);
+                return resultState;
             case 'addPlayer':
                 let playerObject = blankPlayer;
                 playerObject.name = action.name;
@@ -32,18 +38,20 @@ const Scoresheet = ({ listOfPlayers }) => {
         }
     };
 
+    const [localScore, setScore] = useLocalStorageState('score', []);
     /**
      * Main object of this component
      * An array of players
      * Each player object hold score of the individual
      */
-    const [players, dispatch] = useReducer(playersReducer, []);
+    const [players, dispatch] = useReducer(playersReducer, localScore.length > 0 ? localScore : []);
+
 
     /**
      * Init players (main component object) from list of players from props
      */
     useEffect(() => {
-        if (listOfPlayers) {
+        if (listOfPlayers && localScore.length === 0) {
             listOfPlayers.forEach(name => {
                 dispatch({
                     type: 'addPlayer',

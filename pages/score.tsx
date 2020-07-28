@@ -1,10 +1,11 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react';
 import useLocalStorageState from "use-local-storage-state";
 import Score from '@components/Score';
 
 const ScorePage = ({ initialPlayers }) => {
-  console.log('initialPlayers', initialPlayers);
+  const router = useRouter();
   // List of player who play this game
   const [playing, setPlaying] = useLocalStorageState('playing', []);
   const [isLoading, setLoading] = useState(true);
@@ -19,6 +20,10 @@ const ScorePage = ({ initialPlayers }) => {
     )
   }
 
+  const startNewGame = () => {
+    router.push('/setup');
+  }
+
   return (
     <div className="container">
       <Head>
@@ -30,19 +35,20 @@ const ScorePage = ({ initialPlayers }) => {
         <h1 className="title">
           Score
         </h1>
-        <hr/>
+        <hr />
         <Score listOfPlayers={playing} />
-        <hr/>
+        <hr />
         <button>
           <p className="description">
             Winner ?
-        </p>
+          </p>
+        </button>
+        <button onClick={startNewGame}>
+          New Game !
         </button>
 
         <button>
-          <p className="description">
-            Statistic
-          </p>
+          Statistic
         </button>
       </main>
 
