@@ -1,11 +1,23 @@
 import Head from 'next/head'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useLocalStorageState from "use-local-storage-state";
+import Score from '@components/Score';
 
 const ScorePage = ({ initialPlayers }) => {
   console.log('initialPlayers', initialPlayers);
   // List of player who play this game
   const [playing, setPlaying] = useLocalStorageState('playing', []);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <h3>Loading...</h3>
+    )
+  }
 
   return (
     <div className="container">
@@ -18,11 +30,9 @@ const ScorePage = ({ initialPlayers }) => {
         <h1 className="title">
           Score
         </h1>
-        {JSON.stringify(playing)}
-
-        <p className="description">
-          Score table
-        </p>
+        <hr/>
+        <Score listOfPlayers={playing} />
+        <hr/>
         <button>
           <p className="description">
             Winner ?

@@ -10,6 +10,12 @@
       ],
       "@styles/*": [
         "styles/*"
+      ],
+      "@images/*": [
+        "images/*"
+      ],
+      "@config/*": [
+        "config/*"
       ]
     },
     "target": "es5",
