@@ -62,8 +62,6 @@ const ScorePage = ({ initialPlayers }) => {
           <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>
-
-      <style jsx>{``}</style>
     </div>
   )
 }

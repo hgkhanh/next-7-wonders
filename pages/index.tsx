@@ -15,13 +15,12 @@ const HomePage = () => {
           Seven wonders app with <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <button>
-          <Link href="/setup">
-            <a className="description">
-              New game
-            </a>
-          </Link>
-        </button>
+
+        <Link href="/setup">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            New game
+          </button>
+        </Link>
       </main>
 
       <footer>
