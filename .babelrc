@@ -4,6 +4,16 @@
     ],
     "plugins": [
         [
+            "macros"
+        ],
+        [
+            "tailwind-components",
+            {
+                "config": "./tailwind.config.js",
+                "format": "auto"
+            }
+        ],
+        [
             "styled-components",
             {
                 "ssr": true

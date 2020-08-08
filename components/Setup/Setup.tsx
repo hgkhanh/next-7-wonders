@@ -1,7 +1,9 @@
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Fragment, useReducer, useState, useEffect } from 'react'
-import useLocalStorageState from "use-local-storage-state";
+import useLocalStorageState from "use-local-storage-state"
+import styled from 'styled-components'
+import { Button } from 'rebass'
+import { Label, Checkbox } from '@rebass/forms'
 
 // interface PlayerList {
 //     name: string,
@@ -12,7 +14,7 @@ import useLocalStorageState from "use-local-storage-state";
  * This will be display to the UI
  * Only when exiting edit mode, we submit the change to DB (updatePlayerData) 
  */
-const Player = (props) => {
+const Setup = (props) => {
     const router = useRouter()
 
     // List of player who play this game
@@ -71,7 +73,12 @@ const Player = (props) => {
         router.push('/score');
     }
 
-    console.log('Players props', props);
+    const PlayerListEdit = styled.div`
+        li {
+            display: inline-block; 
+        }
+    `;
+
     if (players) {
         return (
             <Fragment>
@@ -87,7 +94,7 @@ const Player = (props) => {
                     <Fragment>
                         <h2>
                             Choose players
-                    </h2>
+                        </h2>
                         <ul>
                             {players && players.length > 0 && players.map((item, index) => (
                                 <div key={index}>
@@ -97,7 +104,7 @@ const Player = (props) => {
                                                 type: 'setActive',
                                                 playerNumber: index,
                                                 active: event.target.checked
-                                            })} />
+                                            })} className="mr-2" />
                                         {item.name}
                                     </label>
                                 </div>
@@ -112,7 +119,7 @@ const Player = (props) => {
                         </h2>
                         <ul>
                             {players.map((item, index) => (
-                                <Fragment key={`edit-${index}`}>
+                                <PlayerListEdit key={`edit-${index}`}>
                                     <li>
                                         <input type="text" value={item.name}
                                             onChange={event => dispatch({
@@ -120,22 +127,24 @@ const Player = (props) => {
                                                 playerNumber: index,
                                                 name: event.target.value
                                             })} />
+                                        <button onClick={() => dispatch({ type: 'removePlayer', playerNumber: index })}>Delete</button>
                                     </li>
-                                    <button onClick={() => dispatch({ type: 'removePlayer', playerNumber: index })}>Delete</button>
-                                </Fragment>
+                                </PlayerListEdit>
                             ))}
                         </ul>
-                        <button className="description" onClick={() => dispatch({ type: 'addPlayer' })}>
+                        <Button m={2}
+                            onClick={() => dispatch({ type: 'addPlayer' })}>
                             Add Player
-                        </button>
+                        </Button>
                     </Fragment>
                 )}
-                {!isEditMode && (
-                    <button onClick={startGame} 
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Start game
-                    </button>
-                )}
+                <div className="m-2">
+                    {!isEditMode && (
+                        <Button m={2} onClick={startGame}>
+                            Start game
+                        </Button>
+                    )}
+                </div>
             </Fragment>
         )
     } else {
@@ -143,4 +152,4 @@ const Player = (props) => {
     }
 }
 
-export default Player
+export default Setup

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import Layout from '@components/Layout/Layout'
+import { Button } from 'rebass'
 
 const HomePage = () => {
   return (
@@ -17,9 +17,7 @@ const HomePage = () => {
 
 
         <Link href="/setup">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            New game
-          </button>
+          <Button variant='primary' m={2}>New Game</Button>
         </Link>
       </main>
 

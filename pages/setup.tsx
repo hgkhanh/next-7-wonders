@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import useSWR, { mutate } from 'swr'
 import fetch from 'unfetch'
-import Player from '@components/Player'
+import Setup from '@components/Setup'
 
 const playersAPI = '/api/players';
 
@@ -38,7 +38,7 @@ const SetupPage = () => {
 
 
   const { data, error } = useSWR(playersAPI, getPlayers);
-  if (error) return <div>failed to load</div>
+  if (error) return <div>{error}</div>
   if (!data) return <div>loading...</div>
   if (data && data.length > 0) {
     return (
@@ -52,7 +52,7 @@ const SetupPage = () => {
           <h1 className="title">
             Setup
           </h1>
-          <Player players={data} updatePlayerData={(data) => updatePlayerData(data)} />
+          <Setup players={data} updatePlayerData={(data) => updatePlayerData(data)} />
         </main>
 
         <footer>
@@ -68,6 +68,7 @@ const SetupPage = () => {
       </div>
     )
   }
+  return <div>failed to load</div>;
 }
 
 export default SetupPage
