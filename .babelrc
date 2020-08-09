@@ -1,6 +1,7 @@
 {
     "presets": [
-        "next/babel"
+        "next/babel",
+        "@emotion/babel-preset-css-prop"
     ],
     "plugins": [
         [
@@ -11,12 +12,6 @@
             {
                 "config": "./tailwind.config.js",
                 "format": "auto"
-            }
-        ],
-        [
-            "styled-components",
-            {
-                "ssr": true
             }
         ]
     ]

@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { Fragment, useReducer, useState, useEffect } from 'react'
 import useLocalStorageState from "use-local-storage-state"
-import styled from 'styled-components'
 import { Button, Flex, Box } from 'rebass'
 import { Label, Checkbox, Input } from '@rebass/forms'
 

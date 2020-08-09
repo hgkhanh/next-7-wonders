@@ -1,11 +1,19 @@
-import React from 'react';
-import coin from '@images/icon-coin.svg';
-import island from '@images/icon-island.svg';
-import leader from '@images/icon-leader.svg';
-import wonder from '@images/icon-wonder.svg';
-import styled from 'styled-components'
+import React from 'react'
+import coin from '@images/icon-coin.svg'
+import island from '@images/icon-island.svg'
+import leader from '@images/icon-leader.svg'
+import wonder from '@images/icon-wonder.svg'
+import { Box } from 'rebass'
+import { css, jsx } from '@emotion/core'
+import styled from '@emotion/styled'
+import { useTheme } from 'emotion-theming'
 
+interface ThemeObject {
+    fontSizes: Array<String>
+}
 const Row = (props) => {
+    const theme: ThemeObject = useTheme();
+    console.log(props.theme);
     let {
         pointIndex,
         name,
@@ -16,7 +24,9 @@ const Row = (props) => {
         dispatch
     } = props;
 
+    let iconDiv;
     let color = props.color || '#000000';
+
     const handlePointChange = (event, playerId, columnIndex) => {
         dispatch(
             {
@@ -44,16 +54,12 @@ const Row = (props) => {
         return parseFloat(value);
     };
 
-    const imageSrc = {
-        coin: coin,
-        leader: leader,
-        armada: island,
-        wonder: wonder
-    };
+    const Row = styled.tr`
+        font-size: ${(props: { totalRow: boolean }) => props.totalRow ? theme.fontSizes[4] + 'px' : theme.fontSizes[2] + 'px'};
+    `
 
-    let iconDiv;
-    const Row = styled.td`
-        background-color: ${props => props.isEvenRow ? props.color + "22" : props.color + "44"};
+    const Cell = styled.td`
+        background-color: ${(props: { isEvenRow?: boolean, color: string }) => props.isEvenRow ? props.color + '22' : props.color + '44'};
         text-align: center;
         input {
             background-color: transparent;
@@ -62,13 +68,9 @@ const Row = (props) => {
                 outline: none;
             }
         }
-    `;
+    `
 
-    const Cell = styled.div`
-        background-color: ${props.color};
-    `;
-
-    const CardCell = styled(Cell)`
+    const cardStyle = css`
         margin: 1rem;
         flex-basis: 45%;
         padding: 1.5rem;
@@ -83,43 +85,55 @@ const Row = (props) => {
     // There are 3 type of row Header
     if (card) {
         // Header with card image
-        iconDiv = (<CardCell color={color}></CardCell>)
+        iconDiv =
+            <div css={css`
+                    background-color: ${color};
+                    ${cardStyle}
+                   `}>
+            </div>
     } else {
+        const imageSrc = {
+            coin: coin,
+            leader: leader,
+            armada: island,
+            wonder: wonder
+        };
         if (imageSrc[name]) {
             // Header with icon svg
             // A react component is a function, you want to call it.
+
             iconDiv = imageSrc[name]();
         } else {
             // Header with text
-            iconDiv = <Cell color={color}>{name}</Cell>
+            iconDiv = <span>{name}</span>
         }
     }
 
 
 
     return (
-        <tr className={totalRow ? 'total' : ''}>
+        <Row totalRow={totalRow}>
             {/* First Column is Icon Column */}
-            <Row color={color}>
+            <Cell color={color}>
                 {iconDiv}
-            </Row>
+            </Cell>
             {/* Second column onwards are score columns */}
             {/* If row is readOnly , use <span> */}
             {
                 data.map((point, playerIndex) => readOnly ? (
-                    <Row key={`point-${playerIndex}-${[pointIndex]}`}
+                    <Cell key={`point-${playerIndex}-${[pointIndex]}`}
                         color={color} isEvenRow={parseInt(playerIndex) % 2 === 0}>
                         <span>{`${point}`}</span>
-                    </Row>
+                    </Cell>
                 ) : (
-                        <Row key={`point-${playerIndex}-${[pointIndex]}`}
+                        <Cell key={`point-${playerIndex}-${[pointIndex]}`}
                             color={color} isEvenRow={parseInt(playerIndex) % 2 === 0}>
                             <input type='text' value={point} onChange={(event) => handlePointChange(event, playerIndex, pointIndex)}
                                 onKeyPress={(event) => filterInput(event)} />
-                        </Row>
+                        </Cell>
                     ))
             }
-        </tr >
+        </Row>
 
     )
 }
