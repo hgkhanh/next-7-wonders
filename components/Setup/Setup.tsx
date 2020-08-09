@@ -2,8 +2,8 @@ import { useRouter } from 'next/router'
 import { Fragment, useReducer, useState, useEffect } from 'react'
 import useLocalStorageState from "use-local-storage-state"
 import styled from 'styled-components'
-import { Button } from 'rebass'
-import { Label, Checkbox } from '@rebass/forms'
+import { Button, Flex, Box } from 'rebass'
+import { Label, Checkbox, Input } from '@rebass/forms'
 
 // interface PlayerList {
 //     name: string,
@@ -73,79 +73,82 @@ const Setup = (props) => {
         router.push('/score');
     }
 
-    const PlayerListEdit = styled.div`
-        li {
-            display: inline-block; 
-        }
-    `;
-
     if (players) {
         return (
-            <Fragment>
-                <div className="block">
-                    <label className="inline-flex items-center">
-                        <input type="checkbox" className="form-checkbox h-8 w-8"
+            <Flex flexWrap='wrap' justifyContent='center' my={2} textAlign='center'>
+                <Box width={1} my={2}>
+                    <Label justifyContent='center' fontSize={3}>
+                        <Checkbox sx={{
+                            transform: 'scale(2)'
+                        }} mr={3}
                             value={`${isEditMode}`} onChange={() => setEditMode(!isEditMode)} />
-                        <span className="ml-4 text-xl">Edit</span>
-                    </label>
-                </div>
-
+                        Edit
+                    </Label>
+                </Box>
                 {!isEditMode && (
-                    <Fragment>
-                        <h2>
+                    <Box width={1} my={2}>
+                        <Box as='h2' my={2}>
                             Choose players
-                        </h2>
-                        <ul>
-                            {players && players.length > 0 && players.map((item, index) => (
-                                <div key={index}>
-                                    <label>
-                                        <input type="checkbox" checked={item.active}
-                                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch({
-                                                type: 'setActive',
-                                                playerNumber: index,
-                                                active: event.target.checked
-                                            })} className="mr-2" />
-                                        {item.name}
-                                    </label>
-                                </div>
-                            ))}
-                        </ul>
-                    </Fragment>
+                        </Box>
+                        <Box as='ul' width={1}>
+                            <Box sx={{
+                                display: 'inline-block',
+                                textAlign: 'left'
+                            }}>
+                                {players && players.length > 0 && players.map((item, index) => (
+                                    <div key={index}>
+                                        <label>
+                                            <input type="checkbox" checked={item.active}
+                                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch({
+                                                    type: 'setActive',
+                                                    playerNumber: index,
+                                                    active: event.target.checked
+                                                })} className="mr-2" />
+                                            {item.name}
+                                        </label>
+                                    </div>
+                                ))}
+                            </Box>
+                        </Box>
+                    </Box>
                 )}
                 {isEditMode && (
-                    <Fragment>
-                        <h2>
+                    <Box width={1} my={2}>
+                        <Box as='h2' my={2}>
                             Edit players
-                        </h2>
-                        <ul>
+                        </Box>
+                        <Box as='ul' width={1}>
                             {players.map((item, index) => (
-                                <PlayerListEdit key={`edit-${index}`}>
-                                    <li>
-                                        <input type="text" value={item.name}
-                                            onChange={event => dispatch({
-                                                type: 'setName',
-                                                playerNumber: index,
-                                                name: event.target.value
-                                            })} />
-                                        <button onClick={() => dispatch({ type: 'removePlayer', playerNumber: index })}>Delete</button>
-                                    </li>
-                                </PlayerListEdit>
+                                <Flex as='li' flexWrap='wrap'key={`edit-${index}`} my={2} justifyContent='center'>
+                                    <Input type="text" value={item.name} width={1 / 2}
+                                        sx={{ display: 'inline-block' }}
+                                        onChange={event => dispatch({
+                                            type: 'setName',
+                                            playerNumber: index,
+                                            name: event.target.value
+                                        })} />
+                                    <Button ml={2} sx={{ display: 'inline-block' }}
+                                        variant='outline'
+                                        onClick={() => dispatch({ type: 'removePlayer', playerNumber: index })}>Delete</Button>
+                                </Flex>
                             ))}
-                        </ul>
-                        <Button m={2}
-                            onClick={() => dispatch({ type: 'addPlayer' })}>
-                            Add Player
-                        </Button>
-                    </Fragment>
+                        </Box>
+                        <Box width={1}>
+                            <Button m={2}
+                                onClick={() => dispatch({ type: 'addPlayer' })}>
+                                Add Player
+                            </Button>
+                        </Box>
+                    </Box>
                 )}
-                <div className="m-2">
+                <Box width={1}>
                     {!isEditMode && (
                         <Button m={2} onClick={startGame}>
                             Start game
                         </Button>
                     )}
-                </div>
-            </Fragment>
+                </Box>
+            </Flex>
         )
     } else {
         return (<div></div>);
