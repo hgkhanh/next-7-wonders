@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react';
 import useLocalStorageState from 'use-local-storage-state';
 import Score from '@components/Score';
-import { Button, Flex, Box, Text } from 'rebass'
+import { Flex } from 'rebass';
 
 const ScorePage = ({ initialPlayers }) => {
   const router = useRouter();
@@ -37,27 +37,8 @@ const ScorePage = ({ initialPlayers }) => {
           Score
         </h1>
         <hr />
-        <Score listOfPlayers={playing} />
-        <hr />
-        <Flex flexWrap='wrap' justifyContent='center' my={2} textAlign='center'>
-          <Box width={1 / 2} p={2}>
-            <Button variant='primary' width={1}>
-              <p className='description'>
-                Winner ?
-            </p>
-            </Button>
-          </Box>
-          <Box width={1 / 2} p={2}>
-            <Button variant='secondary' onClick={startNewGame} width={1}>
-              New Game !
-          </Button>
-          </Box>
-
-          <Box width={1} p={2}>
-            <Button variant='outline' width={1}>
-              Statistic
-          </Button>
-          </Box>
+        <Flex>
+          <Score listOfPlayers={playing} startNewGame={startNewGame} />
         </Flex>
       </main>
 
