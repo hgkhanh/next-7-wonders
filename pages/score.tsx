@@ -48,13 +48,13 @@ const ScorePage = ({ initialPlayers }) => {
             </Button>
           </Box>
           <Box width={1 / 2} p={2}>
-            <Button variant='outline' onClick={startNewGame} width={1}>
+            <Button variant='secondary' onClick={startNewGame} width={1}>
               New Game !
           </Button>
           </Box>
 
           <Box width={1} p={2}>
-            <Button variant='secondary' width={1}>
+            <Button variant='outline' width={1}>
               Statistic
           </Button>
           </Box>
